@@ -128,8 +128,8 @@ DATABASES = {
         'NAME': 'expense_management',
         'USER': 'vtcdigicom',
         'PASSWORD': 'VtcDigicom2022',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'HOST': '118.107.77.84',
+        'PORT': 3306,
     }
 }
 
