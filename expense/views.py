@@ -8,14 +8,14 @@ from expense.serializers import (
     ExpenseSerializer,
     UpdateIncomeSerializer,
     UpdateExpenseSerializer,
-    CategorySerializer
+    CategorySerializer,
 )
 from expense.models import Income, Expense, Category
 
 
 class CategoryView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, page=None, size=None):
         page = request.GET.get("page", None)
         size = request.GET.get("size", None)
@@ -32,11 +32,13 @@ class CategoryView(APIView):
             "size": int(size if size else len(categories)),
         }
         return JsonResponse(data, status=200)
-    
+
     def post(self, request):
         try:
-            category = Category.objects.get(name=request.data.get("name"))
-            err= {'err': 'Category with name already exists'}
+            category = Category.objects.get(
+                Q(name=request.data.get("name")) & Q(user_id=self.request.user.id)
+            )
+            err = {"err": "Category with name already exists"}
             return JsonResponse(err, status=303)
         except:
             pass
@@ -109,27 +111,27 @@ class ExpenseView(APIView):
 
 class CategoryWithIdView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, category_id):
         try:
             category = Category.objects.get(id=str(category_id).strip())
         except Category.DoesNotExist:
-            err = {'err': 'Category with id does not exist'}
+            err = {"err": "Category with id does not exist"}
             return JsonResponse(err, status=404)
         if category.user_id != self.request.user:
-            err = {'err': 'Don\'t have permission to access this category'}
+            err = {"err": "Don't have permission to access this category"}
             return JsonResponse(err, status=403)
         serializer = CategorySerializer(category, many=False)
         return JsonResponse(serializer.data, status=200)
-    
+
     def put(self, request, category_id):
         try:
             category = Category.objects.get(id=str(category_id).strip())
         except Category.DoesNotExist:
-            err = {'err': 'Category with id does not exist'}
+            err = {"err": "Category with id does not exist"}
             return JsonResponse(err, status=404)
         if category.user_id != self.request.user:
-            err = {'err': 'Don\'t have permission to access this category'}
+            err = {"err": "Don't have permission to access this category"}
             return JsonResponse(err, status=403)
         serializer = CategorySerializer(instance=category, data=request.data)
         if serializer.is_valid():
@@ -137,18 +139,18 @@ class CategoryWithIdView(APIView):
             category.save()
             return JsonResponse(serializer.data, status=200)
         return JsonResponse(serializer.errors, status=400)
-    
+
     def delete(self, request, category_id):
         try:
             category = Category.objects.get(id=str(category_id).strip())
         except Category.DoesNotExist:
-            err = {'err': 'Category with id does not exist'}
+            err = {"err": "Category with id does not exist"}
             return JsonResponse(err, status=404)
         if category.user_id != self.request.user:
-            err = {'err': 'Don\'t have permission to access this category'}
+            err = {"err": "Don't have permission to access this category"}
             return JsonResponse(err, status=403)
         category.delete()
-        msg = {'msg': 'Category deleted successfully'}
+        msg = {"msg": "Category deleted successfully"}
         return JsonResponse(msg, status=204)
 
 
@@ -244,43 +246,49 @@ class ExpenseByIdView(APIView):
 
 class IncomeExpenseByDateView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, date=None):
-        date = request.GET.get('date', None)
+        date = request.GET.get("date", None)
         if not date:
-            err = {'err': 'Date is required (YYYY-mm-dd)'}
+            err = {"err": "Date is required (YYYY-mm-dd)"}
             return JsonResponse(err, status=400)
         incomes = Income.objects.filter(Q(user_id=self.request.user.id) & Q(date=date))
-        expenses = Expense.objects.filter(Q(user_id=self.request.user.id) & Q(date=date))
+        expenses = Expense.objects.filter(
+            Q(user_id=self.request.user.id) & Q(date=date)
+        )
         total_incomes = sum([income.amount for income in incomes])
         total_expense = sum([expense.amount for expense in expenses])
         data = {
-            'incomes': IncomeSerializer(incomes, many=True).data,
-            'expenses': ExpenseSerializer(expenses, many=True).data,
-            'total_incomes': total_incomes,
-            'total_expenses': total_expense,
-            'date': date
+            "incomes": IncomeSerializer(incomes, many=True).data,
+            "expenses": ExpenseSerializer(expenses, many=True).data,
+            "total_incomes": total_incomes,
+            "total_expenses": total_expense,
+            "date": date,
         }
         return JsonResponse(data, status=200)
 
 
 class IncomeExpenseByCategoryIdView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request, category_id):
         try:
             category = Category.objects.get(id=str(category_id).strip())
         except Category.DoesNotExist:
-            err = {'err': 'Category with id does not exist'}
+            err = {"err": "Category with id does not exist"}
             return JsonResponse(err, status=404)
         if category.user_id != self.request.user:
-            err = {'err': 'Don\'t have permission to access this category'}
+            err = {"err": "Don't have permission to access this category"}
             return JsonResponse(err, status=403)
-        incomes = Income.objects.filter(Q(user_id=self.request.user.id) & Q(category_id=category_id))
-        expenses = Expense.objects.filter(Q(user_id=self.request.user.id) & Q(category_id=category_id))
+        incomes = Income.objects.filter(
+            Q(user_id=self.request.user.id) & Q(category_id=category_id)
+        )
+        expenses = Expense.objects.filter(
+            Q(user_id=self.request.user.id) & Q(category_id=category_id)
+        )
         data = {
-            'category': CategorySerializer(category, many=False).data,
-            'incomes': IncomeSerializer(incomes, many=True).data,
-            'expenses': ExpenseSerializer(expenses, many=True).data
+            "category": CategorySerializer(category, many=False).data,
+            "incomes": IncomeSerializer(incomes, many=True).data,
+            "expenses": ExpenseSerializer(expenses, many=True).data,
         }
         return JsonResponse(data, status=200)

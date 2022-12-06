@@ -5,11 +5,11 @@ from rest_framework import serializers
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'user_id', 'name')
+        fields = ("id", "user_id", "name")
         extra_kwargs = {
-            'id': {'read_only': True},
-            'user_id': {'read_only': True},
-            'name': {'required': True}
+            "id": {"read_only": True},
+            "user_id": {"read_only": True},
+            "name": {"required": True},
         }
 
 
