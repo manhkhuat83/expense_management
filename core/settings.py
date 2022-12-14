@@ -123,13 +123,17 @@ WSGI_APPLICATION = "core.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'expense_management',
-        'USER': 'vtcdigicom',
-        'PASSWORD': 'VtcDigicom2022',
-        'HOST': '118.107.77.84',
-        'PORT': 3306,
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql', 
+    #     'NAME': 'expense_management',
+    #     'USER': 'vtcdigicom',
+    #     'PASSWORD': 'VtcDigicom2022',
+    #     'HOST': '118.107.77.84',
+    #     'PORT': 3306,
+    # }
+    "default": {
+    "ENGINE": "django.db.backends.sqlite3",
+    "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
