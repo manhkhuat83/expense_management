@@ -13,8 +13,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
+from rest_framework.permissions import AllowAny
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Expense Management API",
+        default_version="v1",
+        contact=openapi.Contact(email="dungkk0105@gmail.com"),
+        license=openapi.License(name="Manh Khuat Van"),
+    ),
+    public=True,
+    permission_classes=[AllowAny],
+)
 
 api_decorate = lambda endpoint: settings.API_PREFIX + endpoint
 
@@ -22,4 +37,5 @@ urlpatterns = [
     path(api_decorate(""), include("authentication.urls")),
     path(api_decorate(""), include("expense.urls")),
     path(api_decorate(""), include("statistic.urls")),
+    re_path(r"docs/$", schema_view.with_ui("swagger", cache_timeout=0)),
 ]

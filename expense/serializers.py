@@ -1,10 +1,10 @@
-from expense.models import Income, Expense, Category
+from expense.models import Income, Expense, IncomeCategory, ExpenseCategory
 from rest_framework import serializers
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class IncomeCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Category
+        model = IncomeCategory
         fields = ("id", "user_id", "name")
         extra_kwargs = {
             "id": {"read_only": True},
@@ -19,7 +19,7 @@ class IncomeSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "user_id",
-            "category_id",
+            "income_category_id",
             "description",
             "amount",
             "date",
@@ -27,7 +27,7 @@ class IncomeSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "id": {"read_only": True},
             "user_id": {"read_only": True},
-            "category_id": {"required": True},
+            "income_category_id": {"required": True},
             "description": {"required": True},
             "amount": {"required": True},
             "date": {"required": True},
@@ -40,7 +40,7 @@ class UpdateIncomeSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "user_id",
-            "category_id",
+            "income_category_id",
             "description",
             "amount",
             "date",
@@ -48,10 +48,21 @@ class UpdateIncomeSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "id": {"read_only": True},
             "user_id": {"read_only": True},
-            "category_id": {"required": False},
+            "income_category_id": {"required": False},
             "description": {"required": False},
             "amount": {"required": False},
             "date": {"required": False},
+        }
+
+
+class ExpenseCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExpenseCategory
+        fields = ("id", "user_id", "name")
+        extra_kwargs = {
+            "id": {"read_only": True},
+            "user_id": {"read_only": True},
+            "name": {"required": True},
         }
 
 
@@ -61,7 +72,7 @@ class ExpenseSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "user_id",
-            "category_id",
+            "expense_category_id",
             "description",
             "amount",
             "date",
@@ -69,7 +80,7 @@ class ExpenseSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "id": {"read_only": True},
             "user_id": {"read_only": True},
-            "category_id": {"required": True},
+            "expense_category_id": {"required": True},
             "description": {"required": True},
             "amount": {"required": True},
             "date": {"required": True},
@@ -82,7 +93,7 @@ class UpdateExpenseSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "user_id",
-            "category_id",
+            "expense_category_id",
             "description",
             "amount",
             "date",
@@ -90,7 +101,7 @@ class UpdateExpenseSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "id": {"read_only": True},
             "user_id": {"read_only": True},
-            "category_id": {"required": False},
+            "expense_category_id": {"required": False},
             "description": {"required": False},
             "amount": {"required": False},
             "date": {"required": False},

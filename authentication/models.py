@@ -1,5 +1,5 @@
-from django.db import models
 from authentication.hashers import make_password, validate_password
+from django.db import models
 import uuid
 
 
