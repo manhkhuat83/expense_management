@@ -9,17 +9,11 @@ from authentication.serializers import (
     UserRegisterSerializer,
     ChangePasswordSerializer,
 )
-from drf_yasg.utils import swagger_auto_schema
 
 
 class UserRegisterView(APIView):
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(
-        operation_description="Register new account",
-        responses={200: UserSerializer, 400: "Invalid data", 303: "See other"},
-        request_body=UserRegisterSerializer,
-    )
     def post(self, request):
         try:
             user = User.objects.get(email=request.data.get("email"))
@@ -38,19 +32,11 @@ class UserRegisterView(APIView):
 class SelfInfoView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(
-        operation_description="Get self info", responses={200: UserSerializer}
-    )
     def get(self, request):
         user = self.request.user
         serializer = UserSerializer(user, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(
-        operation_description="Change password",
-        responses={200: "Changed", 400: "Invalid data"},
-        request_body=ChangePasswordSerializer,
-    )
     def put(self, request):
         user = self.request.user
         serializer = ChangePasswordSerializer(instance=user, data=request.data)

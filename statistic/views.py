@@ -4,7 +4,6 @@ from django.http import JsonResponse
 from django.db.models import Q
 from expense.models import Expense, Income, IncomeCategory, ExpenseCategory
 from datetime import datetime, timedelta
-from drf_yasg.utils import swagger_auto_schema
 
 
 def validate_date(date_str):
@@ -52,9 +51,6 @@ class StatisticIncomeExpenseView(APIView):
 class StatisticIncomeView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(
-        operation_description="Statistic incomes by category and date range"
-    )
     def get(self, request, start_date=None, end_date=None):
         start_date = request.GET.get("start_date")
         end_date = request.GET.get("end_date")
@@ -84,9 +80,6 @@ class StatisticIncomeView(APIView):
 class StatisticExpenseView(APIView):
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(
-        operation_description="Statistic expenses by category and date range"
-    )
     def get(self, request, start_date=None, end_date=None):
         start_date = request.GET.get("start_date")
         end_date = request.GET.get("end_date")
