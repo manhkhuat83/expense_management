@@ -69,7 +69,7 @@ class StatisticIncomeView(APIView):
         for category in categories:
             incomes = Income.objects.filter(
                 Q(user_id=self.request.user)
-                & Q(category=category)
+                & Q(income_category_id=category)
                 & Q(date__range=[start_date, end_date])
             )
             data.update({category.name: sum([income.amount for income in incomes])})
@@ -98,7 +98,7 @@ class StatisticExpenseView(APIView):
         for category in categories:
             expenses = Expense.objects.filter(
                 Q(user_id=self.request.user)
-                & Q(category=category)
+                & Q(expense_category_id=category)
                 & Q(date__range=[start_date, end_date])
             )
             data.update({category.name: sum([expense.amount for expense in expenses])})
