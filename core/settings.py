@@ -104,18 +104,18 @@ TEMPLATES = [
 WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'expense_management',
-    #     'USER': 'vtcdigicom',
-    #     'PASSWORD': 'VtcDigicom2022',
-    #     'HOST': '118.107.77.84',
-    #     'PORT': 3306,
-    # }
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'spiderpig83$expense_management',
+        'USER': 'spiderpig83',
+        'PASSWORD': 'Kvmanh00',
+        'HOST': 'spiderpig83.mysql.pythonanywhere-services.com',
+        'PORT': 3306,
     }
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
