@@ -73,7 +73,7 @@ class StatisticIncomeView(APIView):
                 & Q(date__range=[start_date, end_date])
             )
             data.update({category.name: sum([income.amount for income in incomes])})
-        data.update({"total": total_incomes})
+        data.update({"total_incomes": total_incomes})
         return JsonResponse(data, status=200)
 
 
@@ -102,5 +102,5 @@ class StatisticExpenseView(APIView):
                 & Q(date__range=[start_date, end_date])
             )
             data.update({category.name: sum([expense.amount for expense in expenses])})
-        data.update({"total": total_expenses})
+        data.update({"total_expenses": total_expenses})
         return JsonResponse(data, status=200)
