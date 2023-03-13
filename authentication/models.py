@@ -8,8 +8,9 @@ class User(models.Model):
     USERNAME_FIELD = "email"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(unique=True)
+    email = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
+    secret_key = models.CharField(max_length=255, null=True, blank=True)
     is_superuser = None
     is_active = models.BooleanField(default=True)
     is_anonymous = None

@@ -6,26 +6,28 @@ from authentication.hashers import make_password, validate_password
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "email", "password", "is_active", "date_joined")
+        fields = ("id", "email", "password", "is_active", "date_joined", 'secret_key')
         extra_kwargs = {
             "id": {"read_only": True},
             "email": {"required": True},
             "password": {"write_only": True},
             "is_active": {"read_only": True},
             "date_joined": {"read_only": True},
+            'secret_key': {'required': False}
         }
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "email", "password", "is_active", "date_joined")
+        fields = ("id", "email", "password", "is_active", "date_joined", 'secret_key')
         extra_kwargs = {
             "id": {"read_only": True},
             "email": {"required": True},
             "password": {"write_only": True},
             "is_active": {"read_only": True},
             "date_joined": {"read_only": True},
+            'secret_key': {'required': False}
         }
 
     def create(self, validated_data):
